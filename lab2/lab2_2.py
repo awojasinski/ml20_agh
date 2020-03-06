@@ -36,10 +36,6 @@ def normalize_data(X):
 
 
 data = pd.read_csv(path, header=None, names=['Size', 'Bedrooms', 'Price'])
-
-house_size = data['Size']
-bedrooms = data['Bedrooms']
-house_price = data['Price']
 np_data = data.to_numpy()
 
 np_data_norm = normalize_data(np_data)
@@ -49,10 +45,11 @@ X = np.append(np.full(shape=(X.shape[0], 1), fill_value=1), X, axis=1)
 y = np.array(np_data_norm[:, 2]).T
 theta = np.array([0, 0, 0], dtype=float)
 
-print(computeCost(X, y, theta))
+print('cost for theta = [0, 0]: ', computeCost(X, y, theta))
 
 iterations = 1000
 cost, theta = gradient_prosty(X, y, theta, alpha=0.01, it=iterations)
+print('Computed theta:', theta)
 
 plt.plot(range(len(cost)), cost)
 plt.title('Cost function')
@@ -61,3 +58,21 @@ plt.ylabel('Cost')
 plt.grid(True)
 plt.show()
 
+house_size = X[:, 1]
+bedrooms = X[:, 2]
+price = y
+
+steps = 10
+plot_x = np.array([np.linspace(np.amin(house_size), np.amax(house_size), steps, endpoint=True)]).T
+plot_y = np.array([np.linspace(np.amin(bedrooms), np.amax(bedrooms), steps, endpoint=True)]).T
+plot_z = np.append(np.full(shape=(plot_x.shape[0], 1), fill_value=1), plot_x, axis=1)
+plot_z = np.append(plot_z, plot_y, axis=1) @ theta.T
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+ax.scatter3D(house_size, bedrooms, price)
+ax.plot3D(plot_x, plot_y, plot_z, 'red')
+ax.set_xlabel('size')
+ax.set_ylabel('bedrooms')
+ax.set_zlabel('price')
+plt.show()
