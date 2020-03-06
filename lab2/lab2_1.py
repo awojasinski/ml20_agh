@@ -12,10 +12,12 @@ def computeCost(X, y, theta):
 
     return cost
 
-
+# TODO:
+# 1. add animation (every x iterations show actual line)
 def gradient_prosty(X, y, theta, alpha, it):
     cost = np.empty(shape=([0, 1]))
     dt_theta = np.empty(shape=(theta.size,), dtype=float)
+
     for i in range(it):
         h = X @ theta.T
         for j in range(theta.size):
@@ -33,6 +35,7 @@ profit = data['Profit']
 plt.plot(population, profit, 'o')
 plt.xlabel('Population')
 plt.ylabel('Profit')
+plt.grid(True)
 plt.show()
 
 X = np.array([population]).T
@@ -46,11 +49,20 @@ iterations = 1000
 cost, theta = gradient_prosty(X, y, theta, alpha=0.01, it=iterations)
 print(theta)
 
-plt.plot(range(iterations), cost)
+plt.plot(range(cost), cost)
 plt.title('Cost function')
 plt.xlabel('Iterations')
 plt.ylabel('Cost')
+plt.grid(True)
 plt.show()
 
+sorted_X = X[np.argsort(X[:, 1])]
+plt.plot(population, profit, 'o', label='data')
+plt.plot(sorted_X[:, 1], sorted_X @ theta.T, label='linear regresion')
+plt.xlabel('Population')
+plt.ylabel('Profit')
+plt.grid(True)
+plt.legend()
+plt.show()
 
 
