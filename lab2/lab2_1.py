@@ -49,7 +49,7 @@ iterations = 1000
 cost, theta = gradient_prosty(X, y, theta, alpha=0.01, it=iterations)
 print(theta)
 
-plt.plot(range(cost), cost)
+plt.plot(range(len(cost)), cost)
 plt.title('Cost function')
 plt.xlabel('Iterations')
 plt.ylabel('Cost')
@@ -65,4 +65,15 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
-
+# TODO:
+# 3D contour of cost function for theta from plane
+'''
+theta = np.array([np.linspace(-10, 10, 1000).T, np.linspace(-10, 10, 1000).T]).T
+XX, YY = np.meshgrid(theta[:, 0], theta[:, 1])
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+ax.contour3D(XX, YY, Z, 50, cmap='binary')
+ax.set_xlabel('theta 0')
+ax.set_ylabel('theta 1')
+ax.set_zlabel('cost')
+'''
