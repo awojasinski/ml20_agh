@@ -60,14 +60,15 @@ print("Residual sum of squares (Lasso): {}".format(error_Lasso))
 print("Residual sum of squares (ElasticNet): {}".format(error_ElNet))
 
 # Wyświetlenie prostych regresji obliczonych dla poszczególnych zmiennych
+# wykonać tylko na testowym
 theta0 = reg_LinReg.intercept_
-ones = np.full(shape=boston_Y.shape, fill_value=1)
+ones = np.full(shape=Y_test.shape, fill_value=1)
 for n, (theta1, feature_name) in enumerate(zip(reg_LinReg.coef_, boston['feature_names'])):
     theta = np.array([theta0, theta1])
-    x = np.linspace(np.amin(boston_X[:, n]), np.amax(boston_X[:, n]), num=boston_X.shape[0])
+    x = np.linspace(np.amin(X_test[:, n]), np.amax(X_test[:, n]), num=X_test.shape[0])
     X_data = np.array([ones, x]).T
     h = X_data @ theta.T
-    plt.plot(boston_X[:, n], boston_Y, 'o')
+    plt.plot(X_test[:, n], Y_test, 'o')
     plt.plot(X_data[:, 1], h)
     plt.title('Prosta regresji')
     plt.xlabel(feature_name)
