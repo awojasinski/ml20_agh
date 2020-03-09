@@ -58,3 +58,19 @@ print("Residual sum of squares (Linear Regression): {}".format(error_LinReg))
 print("Residual sum of squares (Ridge): {}".format(error_Ridge))
 print("Residual sum of squares (Lasso): {}".format(error_Lasso))
 print("Residual sum of squares (ElasticNet): {}".format(error_ElNet))
+
+# Wyświetlenie prostych regresji obliczonych dla poszczególnych zmiennych
+theta0 = reg_LinReg.intercept_
+ones = np.full(shape=boston_Y.shape, fill_value=1)
+for n, (theta1, feature_name) in enumerate(zip(reg_LinReg.coef_, boston['feature_names'])):
+    theta = np.array([theta0, theta1])
+    x = np.linspace(np.amin(boston_X[:, n]), np.amax(boston_X[:, n]), num=boston_X.shape[0])
+    X_data = np.array([ones, x]).T
+    h = X_data @ theta.T
+    plt.plot(boston_X[:, n], boston_Y, 'o')
+    plt.plot(X_data[:, 1], h)
+    plt.title('Prosta regresji')
+    plt.xlabel(feature_name)
+    plt.ylabel('Wartość domu [1000$]')
+    plt.grid(True)
+    plt.show()
