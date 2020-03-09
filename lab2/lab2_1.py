@@ -12,8 +12,7 @@ def computeCost(X, y, theta):
 
     return cost
 
-# TODO:
-# 1. add animation (every x iterations show actual line)
+
 def gradient_prosty(X, y, theta, alpha, it):
     cost = np.empty(shape=([0, 1]))
     dt_theta = np.empty(shape=(theta.size,), dtype=float)
@@ -64,16 +63,3 @@ plt.ylabel('Profit')
 plt.grid(True)
 plt.legend()
 plt.show()
-
-# TODO:
-# 3D contour of cost function for theta from plane
-'''
-theta = np.array([np.linspace(-10, 10, 1000).T, np.linspace(-10, 10, 1000).T]).T
-XX, YY = np.meshgrid(theta[:, 0], theta[:, 1])
-fig = plt.figure()
-ax = plt.axes(projection='3d')
-ax.contour3D(XX, YY, Z, 50, cmap='binary')
-ax.set_xlabel('theta 0')
-ax.set_ylabel('theta 1')
-ax.set_zlabel('cost')
-'''
