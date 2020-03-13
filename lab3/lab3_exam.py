@@ -35,8 +35,8 @@ def gradient_decent(X, y, theta, alpha, it):
     for i in range(it):
         h = X @ theta.T
         for j in range(theta.size):
-            sub = (h - y.T)
-            dt_theta[j] = sub @ X[:, j] / X.shape[0]
+            #sub = (h - y.T)
+            dt_theta[j] = (h - y.T) @ X[:, j] / X.shape[0]
         theta -= alpha * dt_theta
         cost = np.append(cost, [compute_cost(theta, X, y)])
     return theta, cost
@@ -68,6 +68,7 @@ plt.show()
 
 t = np.arange(-5, 5, 0.5)
 plt.plot(t, sig(t))
+plt.grid(True)
 plt.show()
 
 # Podział na zbiór testowy i treningowy (30%, 70%)
@@ -85,6 +86,8 @@ print('Współczynniki:\nalpha = %f\nliczba iteracji = %d' %(alpha, it))
 print('-----------------------------------------------------------------------------')
 print('Funkcja kosztu: ', cost[-1])
 print('Wartości theta: ', theta)
+plt.plot(range(it), cost)
+plt.show()
 
 # TODO:
 # 1. fix gradient decent issue
