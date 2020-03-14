@@ -16,7 +16,7 @@ def normalize_data(X):
 
 
 def sig(t):
-    sig = np.empty(shape=(0, 1), dtype=np.float)
+    sig = np.empty(shape=(0, 1), dtype=float)
     for i in t:
         sig = np.append(sig,  [[1 / (1 + math.exp(-i))]])
     return sig
@@ -30,13 +30,11 @@ def compute_cost(theta, X, y):
 
 def gradient_decent(X, y, theta, alpha, it):
     cost = np.empty(shape=([0, 1]))
-    dt_theta = np.empty(shape=(theta.size,), dtype=np.float)
-
+    dt_theta = np.empty(shape=(theta.size,), dtype=float)
     for i in range(it):
-        h = X @ theta.T
+        h = sig(X @ theta.T)
         for j in range(theta.size):
-            #sub = (h - y.T)
-            dt_theta[j] = (h - y.T) @ X[:, j] / X.shape[0]
+            dt_theta[j] = sum((h - y.T) @ X[:, j]) / X.shape[0]
         theta -= alpha * dt_theta
         cost = np.append(cost, [compute_cost(theta, X, y)])
     return theta, cost
@@ -75,23 +73,38 @@ plt.show()
 X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.3)
 
 theta = np.zeros(3)
-print('Funkcja kosztu dla theta = [0, 0, 0]: ', compute_cost(theta, X, y))
+print('Funkcja kosztu dla theta = [0, 0, 0]: ', compute_cost(theta, X_train, Y_train))
 
 alpha = 1
 it = 150
-theta, cost = gradient_decent(X, y, theta, alpha=alpha, it=it)
+theta, cost = gradient_decent(X_train, Y_train, theta, alpha=alpha, it=it)
 print('-----------------------------------------------------------------------------')
 print('Metoda gradientu prostego wyznaczenia współczynników theta regresji logicznej')
 print('Współczynniki:\nalpha = %f\nliczba iteracji = %d' %(alpha, it))
 print('-----------------------------------------------------------------------------')
 print('Funkcja kosztu: ', cost[-1])
 print('Wartości theta: ', theta)
+print('-----------------------------------------------------------------------------')
 plt.plot(range(it), cost)
 plt.show()
 
-# TODO:
-# 1. fix gradient decent issue
-# correct values for alpha = 1 and it = 150
-# cost[-1] = 0.20
-# theta = [1.65947664, 3.8670477, 3.60347302]
-# 2. present accuracy of an algorithm
+Y_result = sig(X_test @ theta.T)
+Y_result = np.where(Y_result > 0.5, Y_result, 0)
+Y_result = np.where(Y_result <= 0.5, Y_result, 1)
+
+indexes_error = np.argwhere(Y_result != Y_test.T)
+
+X_positive = np.argwhere(Y_test == 1)[:, 0]
+X_negative = np.argwhere(Y_test == 0)[:, 0]
+
+accuracy = (len(Y_test) - len(indexes_error)) / len(Y_test)
+print('Skuteczność algorytmu: %.2f%s' %(accuracy, '%'))
+
+plt.scatter(X_test[X_positive, 1], X_test[X_positive, 2], color='green', label='Przyjęty')
+plt.scatter(X_test[X_negative, 1], X_test[X_negative, 2], color='red', label='Nieprzyjęty')
+plt.scatter(X_test[indexes_error, 1], X_test[indexes_error, 2], color='black', label='Źle rozpoznane')
+plt.xlabel('Exam 1')
+plt.ylabel('Exam 2')
+plt.title('Rekrutacja')
+plt.legend()
+plt.show()
