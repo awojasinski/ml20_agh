@@ -6,17 +6,20 @@ import numpy as np
 
 
 def kNN(features_train, features_test, labels_train, k):
+    # Inicjalizacja tablicy klasyfikacji
     predictions = np.empty(shape=(0, 1))
+
+    # Obliczenie ilości występujących klas
     labels = len(np.unique(labels_train))
 
     for feature in features_test:
-        neighbors = np.zeros(shape=(labels, 1))
-        dist = np.zeros(shape=(features_train.shape[0],))
+        neighbors = np.zeros(shape=(labels, 1))     # Inicjalizacja tablicy liczącej sąsiadów
+        dist = np.zeros(shape=(features_train.shape[0],))   # Inicjalizacja tablicy odległości
         x = np.arange(features_train.shape[0])
         dist = np.append([x], [dist], axis=0).T
         for n, i in enumerate(features_train):
-            dist[n, 1] = distance.euclidean(feature, i)
-        dist = dist[dist[:, 1].argsort()]
+            dist[n, 1] = distance.euclidean(feature, i)     # Obliczenie odległości
+        dist = dist[dist[:, 1].argsort()]   # Posortowanie rosnąco odległości
         for j in range(k):
             neighbors[int(labels_train[int(dist[j, 0])])] += 1
         predictions = np.append(predictions, np.argmax(neighbors))
@@ -33,4 +36,4 @@ predictions = kNN(features_train, features_test, labels_train, 3)
 
 # Sprawdzanie skuteczności klasyfikatora
 output = accuracy_score(labels_test, predictions)
-print(output)
+print('Accuracy: ', output)
