@@ -15,8 +15,10 @@ def read_file(file_path: str) -> str:
     :return: file content
     """
 
-    # FIXME: Implement.
-    raise NotImplementedError()
+    with open(file_path) as f:
+        email_content = f.read()
+
+    return email_content
 
 
 # %% ==================== Part 1: Email Preprocessing ====================
