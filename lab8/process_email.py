@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 import re
 from typing import List
 
@@ -16,11 +14,11 @@ def process_email(email_contents: str) -> List[int]:
     :return: a list of indices of the words contained in the email
     """
 
-    # FIXME: Load the vocabulary.
-    vocabulary_dict = None
+    # Load the vocabulary.
+    vocabulary_dict = get_vocabulary_dict()
 
-    # FIXME: Initialize the return value.
-    word_indices = None
+    # Initialize the return value.
+    word_indices = []
 
     # ========================== Preprocess Email ===========================
 
@@ -32,35 +30,34 @@ def process_email(email_contents: str) -> List[int]:
     # header_start = email_contents.find(header_token)
     # email_contents = email_contents[header_start+len(header_token):]
 
-    # FIXME: Convert email content to lower case.
-    email_contents = email_contents
+    # Convert email content to lower case.
+    email_contents = email_contents.lower()
 
     # Strip all HTML
     # Looks for any expression that starts with < and ends with > and replace
     # and does not have any < or > in the tag it with a space
     email_contents = re.sub('<[^<>]+>', ' ', email_contents)
 
-    # FIXME: Handle numbers.
+    # Handle numbers.
     # Convert all sequences of digits (0-9) to a 'number' token.
-    email_contents = re.sub('FIXME', 'number', email_contents)
+    email_contents = re.sub('[0-9]+', 'number', email_contents)
 
-    # FIXME: Handle URLs.
+    # Handle URLs.
     # Convert all strings starting with http:// or https:// to a 'httpaddr' token.
-    email_contents = re.sub('FIXME', 'httpaddr', email_contents)
+    email_contents = re.sub('(http://|https://)+\S*', 'httpaddr', email_contents)
 
-    # FIXME: Handle email addresses.
+    # Handle email addresses.
     # Convert all strings with @ in the middle to a 'emailaddr' token.
-    email_contents = re.sub('FIXME', 'emailaddr', email_contents)
+    email_contents = re.sub('[\S*]+(@)+\S*', 'emailaddr', email_contents)
 
-    # FIXME: Handle $ sign
+    # Handle $ sign
     # Convert all sequences of $ signs to a 'dollar' token.
-    email_contents = re.sub('FIXME', 'dollar', email_contents)
+    email_contents = re.sub('[$]', 'dollar', email_contents)
 
     # ========================== Tokenize Email ===========================
 
     # Output the email to screen as well
     print('\n==== Processed Email ====\n\n')
-
     # Process file
     col = 0
 
@@ -81,36 +78,16 @@ def process_email(email_contents: str) -> List[int]:
 
         # Look up the word in the dictionary and add to word_indices if
         # found
-        # FIXME: ======================= YOUR CODE HERE ======================
-        # Instructions: Fill in this function to add the index of str to
-        #               word_indices if it is in the vocabulary. At this point
-        #               of the code, you have a stemmed word from the email in
-        #               the variable str. You should look up str in the
-        #               vocabulary list (vocabulary_dict). If a match exists, you
-        #               should add the index of the word to the word_indices
-        #               vector. Concretely, if str = 'action', then you should
-        #               look up the vocabulary list to find where in vocabulary_dict
-        #               'action' appears. For example, if vocabulary_dict{18} =
-        #               'action', then, you should add 18 to the word_indices 
-        #               vector (e.g., word_indices = [word_indices ; 18]; ).
-        # 
-        # Note: vocabulary_dict{idx} returns a the word with index idx in the
-        #       vocabulary list.
-        # 
-        # Note: You can use strcmp(str1, str2) to compare two strings (str1 and
-        #       str2). It will return 1 only if the two strings are equivalent.
-        #
-
-        raise NotImplementedError()
-
-        # ========================= END OF YOUR CODE ==========================
+        for i, word in vocabulary_dict.items():
+            if token == word:
+                word_indices.append(i)
 
         # Print to screen, ensuring that the output lines are not too long
         if (col + len(token) + 1) > 78:
             print('')
             col = 0
         print('{} '.format(token), end='', flush=True)
-        col = col + len(tokens) + 1
+        col = col + len(token) + 1
 
     # Print footer
     print('\n\n=========================\n')
