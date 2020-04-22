@@ -15,9 +15,8 @@ def email_features(word_indices: List[int]) -> np.ndarray:
     # Total number of words in the dictionary
     n_words = 1899
 
-    # FIXME: ====================== YOUR CODE HERE ============================
     # Instructions: Fill in this function to return a feature vector for the
-    #               given email (word_indices). To help make it easier to 
+    #               given email (word_indices). To help make it easier to
     #               process the emails, we have have already pre-processed each
     #               email and converted each word in the email into an index in
     #               a fixed dictionary (of 1899 words). The variable
@@ -53,6 +52,7 @@ def email_features(word_indices: List[int]) -> np.ndarray:
     #
     # =========================================================================
 
-    raise NotImplementedError()
-
-    # =========================== END OF YOUR CODE ============================
+    features_vect = np.zeros(shape=(1, n_words))
+    for n in word_indices:
+        features_vect[0, n-1] = 1
+    return features_vect
